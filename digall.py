@@ -2,7 +2,7 @@
 
 import os
 import sys
-
+import subprocess
 class bcolors:
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
@@ -15,8 +15,12 @@ try:
     domain = sys.argv[1]
     os.system('clear')
     if ".no" in domain:
+        proc = subprocess.Popen(["whois "+domain+"|grep 'Id Number'|awk '{print $3}'"], stdout=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
         print "[!] Org/Id"+bcolors.WARNING
-        orgid = os.system("whois "+domain+"|grep 'Id Number'|awk '{print $3}'")
+        print out
+        if "N" not in out:
+            print "No DNS records visible? Check brreg.no in case org is deleted"
     print bcolors.ENDC+"[+] Printing A records"+bcolors.WARNING
     os.system('dig '+domain+' +short A')
     print bcolors.ENDC+"[+] Printing AAAA records"+bcolors.WARNING
