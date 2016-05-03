@@ -14,7 +14,10 @@ class bcolors:
 try:
     domain = sys.argv[1]
     os.system('clear')
-    print "[+] Printing A records"+bcolors.WARNING
+    if ".no" in domain:
+        print "[!] Org/Id"+bcolors.WARNING
+        orgid = os.system("whois "+domain+"|grep 'Id Number'|awk '{print $3}'")
+    print bcolors.ENDC+"[+] Printing A records"+bcolors.WARNING
     os.system('dig '+domain+' +short A')
     print bcolors.ENDC+"[+] Printing AAAA records"+bcolors.WARNING
     os.system('dig '+domain+' +short AAAA')
